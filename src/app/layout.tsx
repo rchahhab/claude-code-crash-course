@@ -34,8 +34,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <ClerkProvider>
           <header className="flex items-center justify-end gap-3 p-4">
             <Show when="signed-out">
-              <SignInButton />
-              <SignUpButton />
+              <SignInButton mode="modal" />
+              <SignUpButton mode="modal" />
             </Show>
             <Show when="signed-in">
               <UserButton />
