@@ -1,16 +1,11 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import db from "@/db";
+import { getMealsForDate, isValidDate, todayUtc } from "@/lib/meals";
 import { DatePicker } from "./date-picker";
-
-const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 function resolveDate(raw: string | string[] | undefined): string {
   const value = Array.isArray(raw) ? raw[0] : raw;
-  if (value && DATE_RE.test(value) && !Number.isNaN(Date.parse(value))) {
-    return value;
-  }
-  return new Date().toISOString().slice(0, 10);
+  return value && isValidDate(value) ? value : todayUtc();
 }
 
 export default async function DashboardPage({
@@ -20,15 +15,7 @@ export default async function DashboardPage({
   if (!userId) redirect("/sign-in");
 
   const date = resolveDate((await searchParams).date);
-  // Day boundaries are UTC
-  const start = new Date(`${date}T00:00:00.000Z`);
-  const end = new Date(start.getTime() + 24 * 60 * 60 * 1000);
-
-  const meals = await db.query.meals.findMany({
-    where: { userId, eatenAt: { gte: start, lt: end } },
-    with: { mealFoodItems: { with: { foodItem: true } } },
-    orderBy: { eatenAt: "asc" },
-  });
+  const meals = await getMealsForDate(userId, date);
 
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8">
