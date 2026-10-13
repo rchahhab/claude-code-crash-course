@@ -1,5 +1,12 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { getMealsForDate, isValidDate, todayUtc } from "@/lib/meals";
 import { DatePicker } from "./date-picker";
 
@@ -25,34 +32,41 @@ export default async function DashboardPage({
       </div>
 
       {meals.length === 0 ? (
-        <p className="text-muted-foreground">No meals logged for {date}.</p>
+        <Card>
+          <CardContent className="text-muted-foreground">
+            No meals logged for {date}.
+          </CardContent>
+        </Card>
       ) : (
-        <ul className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4">
           {meals.map((meal) => {
             const calories = meal.mealFoodItems.reduce(
-              (sum, mfi) => sum + Number(mfi.foodItem?.calories ?? 0) * Number(mfi.quantity),
+              (sum, mfi) =>
+                sum + Number(mfi.foodItem?.calories ?? 0) * Number(mfi.quantity),
               0,
             );
             return (
-              <li key={meal.id} className="rounded-lg border p-4">
-                <div className="flex items-baseline justify-between gap-2">
-                  <h2 className="font-medium">{meal.name ?? "Untitled meal"}</h2>
-                  <span className="text-sm text-muted-foreground">
+              <Card key={meal.id}>
+                <CardHeader>
+                  <CardTitle>{meal.name ?? "Untitled meal"}</CardTitle>
+                  <CardDescription>
                     {meal.eatenAt.toISOString().slice(11, 16)} UTC ·{" "}
                     {Math.round(calories)} kcal
-                  </span>
-                </div>
-                <ul className="mt-2 text-sm text-muted-foreground">
-                  {meal.mealFoodItems.map((mfi) => (
-                    <li key={mfi.id}>
-                      {mfi.foodItem?.name} × {Number(mfi.quantity)}
-                    </li>
-                  ))}
-                </ul>
-              </li>
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="text-muted-foreground">
+                    {meal.mealFoodItems.map((mfi) => (
+                      <li key={mfi.id}>
+                        {mfi.foodItem?.name} × {Number(mfi.quantity)}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
             );
           })}
-        </ul>
+        </div>
       )}
     </main>
   );

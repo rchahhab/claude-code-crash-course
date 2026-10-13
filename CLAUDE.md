@@ -6,6 +6,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Freshly scaffolded with Create Next App; no meal-tracking features exist yet.
 
+## Project docs — READ FIRST
+
+**ALWAYS refer to the relevant file in the `/docs` directory before generating any code.** The docs hold the project's coding standards, and they take precedence over your defaults. Read the matching file first, then write code that follows it. If a task touches an area with a docs file, do not skip this step, even for small changes.
+
+- `docs/ui.md` — UI standards: only shadcn/ui components, no custom UI components. Read before any UI work.
+
+When you add a new file to `/docs`, list it here.
+
 ## Commands
 
 - `npm run dev` — dev server at http://localhost:3000

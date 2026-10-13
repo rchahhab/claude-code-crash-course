@@ -1,20 +1,47 @@
 "use client";
 
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 export function DatePicker({ date }: { date: string }) {
   const router = useRouter();
+  const [open, setOpen] = useState(false);
+
+  // Parse as a local date so the calendar shows the same day as the URL param
+  const [y, m, d] = date.split("-").map(Number);
+  const selected = new Date(y, m - 1, d);
 
   return (
-    <input
-      type="date"
-      value={date}
-      onChange={(e) => {
-        // Cleared input yields ""; keep the current date instead of navigating
-        if (e.target.value) router.push(`/dashboard?date=${e.target.value}`);
-      }}
-      className="h-9 rounded-lg border border-input bg-background px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-      aria-label="Select date"
-    />
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger
+        render={<Button variant="outline" />}
+        aria-label="Select date"
+      >
+        <CalendarIcon />
+        {format(selected, "PPP")}
+      </PopoverTrigger>
+      <PopoverContent align="end" className="w-auto p-0">
+        <Calendar
+          mode="single"
+          selected={selected}
+          defaultMonth={selected}
+          onSelect={(next) => {
+            // Clicking the selected day deselects it; keep the current date
+            if (!next) return;
+            setOpen(false);
+            router.push(`/dashboard?date=${format(next, "yyyy-MM-dd")}`);
+          }}
+        />
+      </PopoverContent>
+    </Popover>
   );
 }
