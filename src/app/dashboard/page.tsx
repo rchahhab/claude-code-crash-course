@@ -7,7 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getMealsForDate, isValidDate, todayUtc } from "@/lib/meals";
+import { getMealsForDate } from "@/data/meals";
+import { isValidDate, todayUtc } from "@/lib/meals";
 import { DatePicker } from "./date-picker";
 
 function resolveDate(raw: string | string[] | undefined): string {

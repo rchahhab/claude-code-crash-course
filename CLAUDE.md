@@ -11,6 +11,9 @@ Freshly scaffolded with Create Next App; no meal-tracking features exist yet.
 **ALWAYS refer to the relevant file in the `/docs` directory before generating any code.** The docs hold the project's coding standards, and they take precedence over your defaults. Read the matching file first, then write code that follows it. If a task touches an area with a docs file, do not skip this step, even for small changes.
 
 - `docs/ui.md` — UI standards: only shadcn/ui components, no custom UI components. Read before any UI work.
+- `docs/data-fetching.md` — Data fetching standards: Server Components only, no route handlers, Drizzle helpers in `src/data/`, no raw SQL, users only see their own data. Read before any data fetching or database work.
+- `docs/auth.md` — Auth standards: Clerk only, `await auth()` on the server for the user id, check `userId` in every page and Server Action. Read before any authentication or user-scoped work.
+- `docs/data-mutations.md` — Data mutation standards: Server Actions only, in co-located `actions.ts` files, calling Drizzle helpers in `src/data/`, typed + validated params, scoped to the user. Read before any insert/update/delete work.
 
 When you add a new file to `/docs`, list it here.
 
