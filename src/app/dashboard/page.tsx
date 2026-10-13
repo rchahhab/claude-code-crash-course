@@ -1,5 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
+import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -29,7 +31,12 @@ export default async function DashboardPage({
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8">
       <div className="mb-6 flex items-center justify-between gap-4">
         <h1 className="text-2xl font-semibold">Dashboard</h1>
-        <DatePicker date={date} />
+        <div className="flex items-center gap-2">
+          <DatePicker date={date} />
+          <Button render={<Link href="/dashboard/meals/new" />} nativeButton={false}>
+            New meal
+          </Button>
+        </div>
       </div>
 
       {meals.length === 0 ? (

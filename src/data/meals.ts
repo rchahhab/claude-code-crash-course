@@ -1,4 +1,16 @@
 import db from "@/db";
+import { meals } from "@/db/schema";
+
+export async function createMeal(
+  userId: string,
+  values: { name: string; eatenAt: Date },
+) {
+  const [meal] = await db
+    .insert(meals)
+    .values({ userId, ...values })
+    .returning();
+  return meal;
+}
 
 // Day boundaries are UTC
 export async function getMealsForDate(userId: string, date: string) {
