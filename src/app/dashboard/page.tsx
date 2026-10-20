@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -56,6 +57,16 @@ export default async function DashboardPage({
             return (
               <Card key={meal.id}>
                 <CardHeader>
+                  <CardAction>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      render={<Link href={`/dashboard/meals/${meal.id}`} />}
+                      nativeButton={false}
+                    >
+                      Edit
+                    </Button>
+                  </CardAction>
                   <CardTitle>{meal.name ?? "Untitled meal"}</CardTitle>
                   <CardDescription>
                     {meal.eatenAt.toISOString().slice(11, 16)} UTC ·{" "}

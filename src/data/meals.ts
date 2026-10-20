@@ -1,3 +1,4 @@
+import { and, eq } from "drizzle-orm";
 import db from "@/db";
 import { meals } from "@/db/schema";
 
@@ -8,6 +9,25 @@ export async function createMeal(
   const [meal] = await db
     .insert(meals)
     .values({ userId, ...values })
+    .returning();
+  return meal;
+}
+
+export async function getMealById(userId: string, mealId: number) {
+  return db.query.meals.findFirst({
+    where: { id: mealId, userId },
+  });
+}
+
+export async function updateMeal(
+  userId: string,
+  mealId: number,
+  values: { name: string; eatenAt: Date },
+) {
+  const [meal] = await db
+    .update(meals)
+    .set(values)
+    .where(and(eq(meals.id, mealId), eq(meals.userId, userId)))
     .returning();
   return meal;
 }
