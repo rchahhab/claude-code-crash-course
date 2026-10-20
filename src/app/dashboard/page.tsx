@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -34,7 +33,10 @@ export default async function DashboardPage({
         <h1 className="text-2xl font-semibold">Dashboard</h1>
         <div className="flex items-center gap-2">
           <DatePicker date={date} />
-          <Button render={<Link href="/dashboard/meals/new" />} nativeButton={false}>
+          <Button
+            render={<Link href="/dashboard/meals/new" />}
+            nativeButton={false}
+          >
             New meal
           </Button>
         </div>
@@ -51,38 +53,35 @@ export default async function DashboardPage({
           {meals.map((meal) => {
             const calories = meal.mealFoodItems.reduce(
               (sum, mfi) =>
-                sum + Number(mfi.foodItem?.calories ?? 0) * Number(mfi.quantity),
+                sum +
+                Number(mfi.foodItem?.calories ?? 0) * Number(mfi.quantity),
               0,
             );
             return (
-              <Card key={meal.id}>
-                <CardHeader>
-                  <CardAction>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      render={<Link href={`/dashboard/meals/${meal.id}`} />}
-                      nativeButton={false}
-                    >
-                      Edit
-                    </Button>
-                  </CardAction>
-                  <CardTitle>{meal.name ?? "Untitled meal"}</CardTitle>
-                  <CardDescription>
-                    {meal.eatenAt.toISOString().slice(11, 16)} UTC ·{" "}
-                    {Math.round(calories)} kcal
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <ul className="text-muted-foreground">
-                    {meal.mealFoodItems.map((mfi) => (
-                      <li key={mfi.id}>
-                        {mfi.foodItem?.name} × {Number(mfi.quantity)}
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
+              <Link
+                key={meal.id}
+                href={`/dashboard/meals/${meal.id}`}
+                className="block rounded-xl focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+              >
+                <Card className="transition-colors hover:bg-muted/50">
+                  <CardHeader>
+                    <CardTitle>{meal.name ?? "Untitled meal"}</CardTitle>
+                    <CardDescription>
+                      {meal.eatenAt.toISOString().slice(11, 16)} UTC ·{" "}
+                      {Math.round(calories)} kcal
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="text-muted-foreground">
+                      {meal.mealFoodItems.map((mfi) => (
+                        <li key={mfi.id}>
+                          {mfi.foodItem?.name} × {Number(mfi.quantity)}
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+              </Link>
             );
           })}
         </div>

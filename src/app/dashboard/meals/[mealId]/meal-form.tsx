@@ -2,6 +2,7 @@
 
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
+import Link from "next/link";
 import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -105,9 +106,18 @@ export function MealForm({
         </p>
       )}
 
-      <Button type="submit" disabled={pending} className="self-start">
-        {pending ? "Saving..." : "Save changes"}
-      </Button>
+      <div className="flex items-center gap-2 self-start">
+        <Button type="submit" disabled={pending}>
+          {pending ? "Saving..." : "Save changes"}
+        </Button>
+        <Button
+          variant="outline"
+          render={<Link href={`/dashboard?date=${defaultDate}`} />}
+          nativeButton={false}
+        >
+          Cancel
+        </Button>
+      </div>
     </form>
   );
 }
